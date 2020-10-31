@@ -49,6 +49,7 @@
                         size="lg"
                         class="full-width"
                         label="Sign in"
+                        @click='login(email,password)'
                     />
                 </q-card-actions>
             </q-card>
@@ -57,7 +58,32 @@
     </q-page>
 </template>
 
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-analytics.js"></script>
+
 <script>
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/database'
+import 'firebase/analytics'
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCO_BL1OsnGQ6VkVqQztJOP4JNCzGjCsos",
+    authDomain: "shopping-app-e6b62.firebaseapp.com",
+    databaseURL: "https://shopping-app-e6b62.firebaseio.com",
+    projectId: "shopping-app-e6b62",
+    storageBucket: "shopping-app-e6b62.appspot.com",
+    messagingSenderId: "589982855139",
+    appId: "1:589982855139:web:cde3f86a2f5a334f9abad6",
+    measurementId: "G-2SF9KWL5E9"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
 export default {
   name: 'Sign In',
   data () {
@@ -65,6 +91,22 @@ export default {
       email: '',
       password: ''
     }
+  },
+
+  methods: {
+    login (email, password) {
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((result) => {
+          if (result.user.uid) {
+            this.$router.replace({ name: 'shoppinglist' })
+          }
+        })
+        .catch(function (error) {
+          var errorMessage = error.message
+
+          this.$q.notify(errorMessage)
+        })
+      }
   }
 }
 </script>
